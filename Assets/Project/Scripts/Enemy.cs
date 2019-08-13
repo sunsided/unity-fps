@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Project.Scripts;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, ITakeDamage
 {
     [Header("Stats")]
     public int currentHp;
@@ -19,6 +20,15 @@ public class Enemy : MonoBehaviour
     private readonly List<Vector3> _path = new List<Vector3>();
     private Weapon _weapon;
     private GameObject _target;
+
+    public void TakeDamage(int damage)
+    {
+        currentHp -= damage;
+        if (currentHp <= 0)
+        {
+            Die();
+        }
+    }
 
     private void Awake()
     {
@@ -41,6 +51,8 @@ public class Enemy : MonoBehaviour
         {
             TryChaseTarget();
         }
+
+        LookAtTarget();
     }
 
     private void UpdatePath()
@@ -88,5 +100,19 @@ public class Enemy : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void LookAtTarget()
+    {
+        var dir = (_target.transform.position - transform.position).normalized;
+        var angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+
+        transform.eulerAngles = Vector3.up * angle;
+    }
+
+    private void Die()
+    {
+        Debug.Log("Enemy has died.");
+        Destroy(gameObject);
     }
 }

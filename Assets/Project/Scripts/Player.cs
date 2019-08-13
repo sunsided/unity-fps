@@ -1,10 +1,22 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Project.Scripts;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ITakeDamage
 {
+    /// <summary>
+    /// The current health points.
+    /// </summary>
+    [Header("Stats")]
+    public int currentHp;
+
+    /// <summary>
+    /// The maximum health points.
+    /// </summary>
+    public int maximumHp;
+
     /// <summary>
     /// Movement speed in units per second.
     /// </summary>
@@ -56,6 +68,15 @@ public class Player : MonoBehaviour
     /// The player's weapon.
     /// </summary>
     private Weapon _weapon;
+
+    public void TakeDamage(int damage)
+    {
+        currentHp -= damage;
+        if (currentHp <= 0)
+        {
+            Die();
+        }
+    }
 
     private void Awake()
     {
@@ -120,5 +141,10 @@ public class Player : MonoBehaviour
         const float axisSign = -1;
         _rotX = Mathf.Clamp(_rotX + x, minLookX, maxLookX);
         _cam.transform.localRotation = Quaternion.Euler(axisSign * _rotX, 0, 0);
+    }
+
+    private void Die()
+    {
+        Debug.Log("Player has died.");
     }
 }
