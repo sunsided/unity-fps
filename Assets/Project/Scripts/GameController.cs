@@ -1,28 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using UnityEngine;
+﻿using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-public class GameController : MonoBehaviour
+namespace Project.Scripts
 {
-    void Update()
+    public class GameController : MonoBehaviour
     {
-        StopGame();
-    }
+        void Update()
+        {
+            StopGame();
+        }
 
-    private static void StopGame()
-    {
-        if (!Input.GetButtonDown("Cancel")) return;
+        private static void StopGame()
+        {
+            if (!Input.GetButtonDown("Cancel")) return;
 
-        Debug.Log("Stopping game.");
+            Debug.Log("Stopping game.");
 
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
+            UnityEditor.EditorApplication.isPlaying = false;
 #elif UNITY_WEBPLAYER
          Application.OpenURL(webplayerQuitURL);
 #else
          Application.Quit();
 #endif
+        }
     }
 }

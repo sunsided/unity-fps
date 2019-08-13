@@ -1,45 +1,47 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Weapon : MonoBehaviour
+namespace Project.Scripts
 {
-    [Header("Models")]
-    public ObjectPool bulletPool;
-    public Transform muzzle;
-    public bool isPlayer;
-
-    [Header("Ammo")]
-    public int currentAmmo;
-    public int maxAmmo;
-    public bool infiniteAmmo;
-
-    [Header("Shooting")]
-    public float bulletSpeed;
-    public float shootRate;
-
-    private float _lastShootTime;
-
-    public bool CanShoot()
+    public class Weapon : MonoBehaviour
     {
-        if (Time.time - _lastShootTime < shootRate) return false;
-        return currentAmmo > 0 || infiniteAmmo;
-    }
+        [Header("Models")]
+        public ObjectPool bulletPool;
+        public Transform muzzle;
+        public bool isPlayer;
 
-    public void Shoot()
-    {
-        _lastShootTime = Time.time;
-        --currentAmmo;
+        [Header("Ammo")]
+        public int currentAmmo;
+        public int maxAmmo;
+        public bool infiniteAmmo;
 
-        var bullet = bulletPool.GetObject();
-        bullet.transform.position = muzzle.position;
-        bullet.transform.rotation = muzzle.rotation;
+        [Header("Shooting")]
+        public float bulletSpeed;
+        public float shootRate;
 
-        bullet.GetComponent<Rigidbody>().velocity = muzzle.forward * bulletSpeed;
-    }
+        private float _lastShootTime;
 
-    private void Awake()
-    {
-        // Are we attached to the player?
-        isPlayer = GetComponent<Player>();
+        public bool CanShoot()
+        {
+            if (Time.time - _lastShootTime < shootRate) return false;
+            return currentAmmo > 0 || infiniteAmmo;
+        }
+
+        public void Shoot()
+        {
+            _lastShootTime = Time.time;
+            --currentAmmo;
+
+            var bullet = bulletPool.GetObject();
+            bullet.transform.position = muzzle.position;
+            bullet.transform.rotation = muzzle.rotation;
+
+            bullet.GetComponent<Rigidbody>().velocity = muzzle.forward * bulletSpeed;
+        }
+
+        private void Awake()
+        {
+            // Are we attached to the player?
+            isPlayer = GetComponent<Player>();
+        }
     }
 }

@@ -1,150 +1,159 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Project.Scripts;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Player : MonoBehaviour, ITakeDamage
+namespace Project.Scripts
 {
-    /// <summary>
-    /// The current health points.
-    /// </summary>
-    [Header("Stats")]
-    public int currentHp;
-
-    /// <summary>
-    /// The maximum health points.
-    /// </summary>
-    public int maximumHp;
-
-    /// <summary>
-    /// Movement speed in units per second.
-    /// </summary>
-    [Header("Movement")]
-    public float moveSpeed;
-
-    /// <summary>
-    /// Force applied upwards when jumping.
-    /// </summary>
-    public float jumpForce;
-
-    /// <summary>
-    /// The distance used for a raycast to determine whether we're on the ground.
-    /// </summary>
-    public float jumpGroundDetectionDistance;
-
-    /// <summary>
-    /// Mouse look sensitivity.
-    /// </summary>
-    [Header("Camera")]
-    public float lookSensitivity;
-
-    /// <summary>
-    /// Highest up angle we can have.
-    /// </summary>
-    public float maxLookX;
-
-    /// <summary>
-    /// Lowest up angle we can have.
-    /// </summary>
-    public float minLookX;
-
-    /// <summary>
-    /// Current X rotation of the camera.
-    /// </summary>
-    private float _rotX;
-
-    /// <summary>
-    /// Main camera.
-    /// </summary>
-    private Camera _cam;
-
-    /// <summary>
-    /// The <see cref="Rigidbody"/> component.
-    /// </summary>
-    private Rigidbody _rig;
-
-    /// <summary>
-    /// The player's weapon.
-    /// </summary>
-    private Weapon _weapon;
-
-    public void TakeDamage(int damage)
+    public class Player : MonoBehaviour, ITakeDamage
     {
-        currentHp -= damage;
-        if (currentHp <= 0)
+        /// <summary>
+        /// The current health points.
+        /// </summary>
+        [Header("Stats")]
+        public int currentHp;
+
+        /// <summary>
+        /// The maximum health points.
+        /// </summary>
+        public int maximumHp;
+
+        /// <summary>
+        /// Movement speed in units per second.
+        /// </summary>
+        [Header("Movement")]
+        public float moveSpeed;
+
+        /// <summary>
+        /// Force applied upwards when jumping.
+        /// </summary>
+        public float jumpForce;
+
+        /// <summary>
+        /// The distance used for a raycast to determine whether we're on the ground.
+        /// </summary>
+        public float jumpGroundDetectionDistance;
+
+        /// <summary>
+        /// Mouse look sensitivity.
+        /// </summary>
+        [Header("Camera")]
+        public float lookSensitivity;
+
+        /// <summary>
+        /// Highest up angle we can have.
+        /// </summary>
+        public float maxLookX;
+
+        /// <summary>
+        /// Lowest up angle we can have.
+        /// </summary>
+        public float minLookX;
+
+        /// <summary>
+        /// Current X rotation of the camera.
+        /// </summary>
+        private float _rotX;
+
+        /// <summary>
+        /// Main camera.
+        /// </summary>
+        private Camera _cam;
+
+        /// <summary>
+        /// The <see cref="Rigidbody"/> component.
+        /// </summary>
+        private Rigidbody _rig;
+
+        /// <summary>
+        /// The player's weapon.
+        /// </summary>
+        private Weapon _weapon;
+
+        public void TakeDamage(int damage)
         {
-            Die();
+            currentHp = Mathf.Clamp(currentHp - damage, 0, maximumHp);;
+            if (currentHp <= 0)
+            {
+                Die();
+            }
         }
-    }
 
-    private void Awake()
-    {
-        _cam = Camera.main;
-        _rig = GetComponent<Rigidbody>();
-        _weapon = GetComponent<Weapon>();
+        public void GiveHealth(int amountToGive)
+        {
+            currentHp = Mathf.Clamp(currentHp + amountToGive, 0, maximumHp);
+        }
 
-        // Disable the cursor.
-        Cursor.lockState = CursorLockMode.Locked;
-    }
+        public void GiveAmmo(int amountToGive)
+        {
+            _weapon.currentAmmo = Mathf.Clamp(_weapon.currentAmmo + amountToGive, 0, _weapon.maxAmmo);
+        }
 
-    private void Update()
-    {
-        Move();
-        TryJump();
-        TryShoot();
-        CamLook();
-    }
+        private void Awake()
+        {
+            _cam = Camera.main;
+            _rig = GetComponent<Rigidbody>();
+            _weapon = GetComponent<Weapon>();
 
-    private void TryShoot()
-    {
-        // Note: GetButton triggers every frame the button is depressed.
-        if (!Input.GetButton("Fire1")) return;
-        if (!_weapon.CanShoot()) return;
-        _weapon.Shoot();
-    }
+            // Disable the cursor.
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
-    private void TryJump()
-    {
-        // Note: GetButtonDown only triggers in the first frame the button was depressed.
-        if (!Input.GetButtonDown("Jump")) return;
+        private void Update()
+        {
+            Move();
+            TryJump();
+            TryShoot();
+            CamLook();
+        }
 
-        var ray = new Ray(transform.position, Vector3.down);
-        if (!Physics.Raycast(ray, jumpGroundDetectionDistance)) return;
+        private void TryShoot()
+        {
+            // Note: GetButton triggers every frame the button is depressed.
+            if (!Input.GetButton("Fire1")) return;
+            if (!_weapon.CanShoot()) return;
+            _weapon.Shoot();
+        }
 
-        _rig.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-    }
+        private void TryJump()
+        {
+            // Note: GetButtonDown only triggers in the first frame the button was depressed.
+            if (!Input.GetButtonDown("Jump")) return;
 
-    void Move()
-    {
-        var x = Input.GetAxis("Horizontal") * moveSpeed;
-        var z = Input.GetAxis("Vertical") * moveSpeed;
+            var ray = new Ray(transform.position, Vector3.down);
+            if (!Physics.Raycast(ray, jumpGroundDetectionDistance)) return;
 
-        var tf = transform;
-        var movementDirection = tf.right * x + tf.forward * z;
-        movementDirection.y = _rig.velocity.y;
+            _rig.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
 
-        _rig.velocity = movementDirection;
-    }
+        void Move()
+        {
+            var x = Input.GetAxis("Horizontal") * moveSpeed;
+            var z = Input.GetAxis("Vertical") * moveSpeed;
 
-    void CamLook()
-    {
-        var y = Input.GetAxis("Mouse X") * lookSensitivity;
-        var x = Input.GetAxis("Mouse Y") * lookSensitivity;
+            var tf = transform;
+            var movementDirection = tf.right * x + tf.forward * z;
+            movementDirection.y = _rig.velocity.y;
 
-        // Y rotation (left/right) is applied to the player (not the camera!), so that the
-        // player is always facing towards the player model's forward direction.
-        transform.eulerAngles += Vector3.up * y;
+            _rig.velocity = movementDirection;
+        }
 
-        // X rotation (up/down) is applied to the camera.
-        // By changing the axis sign to positive, vertical mouse motion is flipped.
-        const float axisSign = -1;
-        _rotX = Mathf.Clamp(_rotX + x, minLookX, maxLookX);
-        _cam.transform.localRotation = Quaternion.Euler(axisSign * _rotX, 0, 0);
-    }
+        void CamLook()
+        {
+            var y = Input.GetAxis("Mouse X") * lookSensitivity;
+            var x = Input.GetAxis("Mouse Y") * lookSensitivity;
 
-    private void Die()
-    {
-        Debug.Log("Player has died.");
+            // Y rotation (left/right) is applied to the player (not the camera!), so that the
+            // player is always facing towards the player model's forward direction.
+            transform.eulerAngles += Vector3.up * y;
+
+            // X rotation (up/down) is applied to the camera.
+            // By changing the axis sign to positive, vertical mouse motion is flipped.
+            const float axisSign = -1;
+            _rotX = Mathf.Clamp(_rotX + x, minLookX, maxLookX);
+            _cam.transform.localRotation = Quaternion.Euler(axisSign * _rotX, 0, 0);
+        }
+
+        private void Die()
+        {
+            Debug.Log("Player has died.");
+        }
     }
 }
