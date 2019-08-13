@@ -323,7 +323,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
-  jumpForce: 0
+  jumpForce: 6
+  jumpGroundDetectionDistance: 1.1
   lookSensitivity: 5
   maxLookX: 80
   minLookX: -80

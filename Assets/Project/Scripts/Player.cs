@@ -17,6 +17,11 @@ public class Player : MonoBehaviour
     public float jumpForce;
 
     /// <summary>
+    /// The distance used for a raycast to determine whether we're on the ground.
+    /// </summary>
+    public float jumpGroundDetectionDistance;
+
+    /// <summary>
     /// Mouse look sensitivity.
     /// </summary>
     [Header("Camera")]
@@ -56,7 +61,18 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Move();
+        TryJump();
         CamLook();
+    }
+
+    private void TryJump()
+    {
+        if (!Input.GetButtonDown("Jump")) return;
+
+        var ray = new Ray(transform.position, Vector3.down);
+        if (!Physics.Raycast(ray, jumpGroundDetectionDistance)) return;
+
+        _rig.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     void Move()
