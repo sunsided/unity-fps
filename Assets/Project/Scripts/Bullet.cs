@@ -7,6 +7,8 @@ namespace Project.Scripts
         public int damage = 1;
         public float lifetime = 5;
 
+        public GameObject hitParticlePrefab;
+
         private float _shootTime;
 
         private void OnEnable()
@@ -39,6 +41,11 @@ namespace Project.Scripts
                 other.GetComponent<ITakeDamage>().TakeDamage(damage);
             }
 #endif
+
+            // Create the hit particle.
+            const float particleLifeTime = 0.5f;
+            var particles = Instantiate(hitParticlePrefab, transform.position, Quaternion.identity);
+            Destroy(particles, particleLifeTime);
 
             // Remove the bullet from the scene.
             gameObject.SetActive(false);

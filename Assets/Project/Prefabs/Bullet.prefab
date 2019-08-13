@@ -49,6 +49,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   lifetime: 3
+  hitParticlePrefab: {fileID: 6160798029893854390, guid: d5c0a5f2b597c2347adeb23223454819,
+    type: 3}
 --- !u!33 &584357133149052098
 MeshFilter:
   m_ObjectHideFlags: 0
