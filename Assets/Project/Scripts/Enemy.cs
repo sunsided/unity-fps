@@ -37,7 +37,10 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        TryChaseTarget();
+        if (!TryStopAndShoot())
+        {
+            TryChaseTarget();
+        }
     }
 
     private void UpdatePath()
@@ -73,5 +76,17 @@ public class Enemy : MonoBehaviour
         {
             _path.RemoveAt(0);
         }
+    }
+
+    private bool TryStopAndShoot()
+    {
+        var dist = Vector3.Distance(transform.position, _target.transform.position);
+        if (dist > attackRange) return false;
+        if (_weapon.CanShoot())
+        {
+            _weapon.Shoot();
+        }
+
+        return true;
     }
 }
