@@ -79,7 +79,12 @@ public class Player : MonoBehaviour
     {
         var x = Input.GetAxis("Horizontal") * moveSpeed;
         var z = Input.GetAxis("Vertical") * moveSpeed;
-        _rig.velocity = new Vector3(x, _rig.velocity.y, z);
+
+        var tf = transform;
+        var movementDirection = tf.right * x + tf.forward * z;
+        movementDirection.y = _rig.velocity.y;
+
+        _rig.velocity = movementDirection;
     }
 
     void CamLook()
