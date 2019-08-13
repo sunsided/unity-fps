@@ -52,21 +52,37 @@ public class Player : MonoBehaviour
     /// </summary>
     private Rigidbody _rig;
 
+    /// <summary>
+    /// The player's weapon.
+    /// </summary>
+    private Weapon _weapon;
+
     private void Awake()
     {
         _cam = Camera.main;
         _rig = GetComponent<Rigidbody>();
+        _weapon = GetComponent<Weapon>();
     }
 
     private void Update()
     {
         Move();
         TryJump();
+        TryShoot();
         CamLook();
+    }
+
+    private void TryShoot()
+    {
+        // Note: GetButton triggers every frame the button is depressed.
+        if (!Input.GetButton("Fire1")) return;
+        if (!_weapon.CanShoot()) return;
+        _weapon.Shoot();
     }
 
     private void TryJump()
     {
+        // Note: GetButtonDown only triggers in the first frame the button was depressed.
         if (!Input.GetButtonDown("Jump")) return;
 
         var ray = new Ray(transform.position, Vector3.down);
