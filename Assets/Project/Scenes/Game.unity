@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 299700493}
   - component: {fileID: 299700492}
   - component: {fileID: 299700491}
+  - component: {fileID: 299700497}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -244,13 +245,31 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 299700490}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.5, y: 2, z: 5.7}
+  m_LocalPosition: {x: 10.81, y: 2, z: 16.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1695342058}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &299700497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 299700490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14eb0bb4b4748faada2c8a6dc2115192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHp: 10
+  maximumHp: 10
+  scoreToGive: 10
+  moveSpeed: 3
+  attackRange: 5
+  yPathOffset: 0.9
 --- !u!1 &305537229
 GameObject:
   m_ObjectHideFlags: 0
