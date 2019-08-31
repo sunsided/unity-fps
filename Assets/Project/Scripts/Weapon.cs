@@ -18,6 +18,11 @@ namespace Project.Scripts
         public float bulletSpeed;
         public float shootRate;
 
+        [Header("Audio")]
+        public AudioClip shootSfx;
+
+        private AudioSource _audioSource;
+
         private float _lastShootTime;
 
         public int CurrentAmmo => currentAmmo;
@@ -39,6 +44,8 @@ namespace Project.Scripts
                 GameUI.Instance.UpdateAmmoText(this);
             }
 
+            _audioSource.PlayOneShot(shootSfx);
+
             var bullet = bulletPool.GetObject();
             bullet.transform.position = muzzle.position;
             bullet.transform.rotation = muzzle.rotation;
@@ -50,6 +57,7 @@ namespace Project.Scripts
         {
             // Are we attached to the player?
             isPlayer = GetComponent<Player>();
+            _audioSource = GetComponent<AudioSource>();
         }
     }
 }
