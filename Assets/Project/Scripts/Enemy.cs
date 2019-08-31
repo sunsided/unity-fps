@@ -112,6 +112,7 @@ namespace Project.Scripts
         private void Die()
         {
             Debug.Log("Enemy has died.");
+            GameManager.Instance.AddScore(scoreToGive);
             Destroy(gameObject);
         }
     }

@@ -31,6 +31,11 @@ namespace Project.Scripts
             _lastShootTime = Time.time;
             --currentAmmo;
 
+            if (isPlayer)
+            {
+                GameUI.Instance.UpdateAmmoText(currentAmmo, maxAmmo);
+            }
+
             var bullet = bulletPool.GetObject();
             bullet.transform.position = muzzle.position;
             bullet.transform.rotation = muzzle.rotation;

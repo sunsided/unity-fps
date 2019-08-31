@@ -70,6 +70,7 @@ namespace Project.Scripts
         public void TakeDamage(int damage)
         {
             currentHp = Mathf.Clamp(currentHp - damage, 0, maximumHp);;
+            GameUI.Instance.UpdateHealthBar(currentHp, maximumHp);
             if (currentHp <= 0)
             {
                 Die();
@@ -79,11 +80,13 @@ namespace Project.Scripts
         public void GiveHealth(int amountToGive)
         {
             currentHp = Mathf.Clamp(currentHp + amountToGive, 0, maximumHp);
+            GameUI.Instance.UpdateHealthBar(currentHp, maximumHp);
         }
 
         public void GiveAmmo(int amountToGive)
         {
             _weapon.currentAmmo = Mathf.Clamp(_weapon.currentAmmo + amountToGive, 0, _weapon.maxAmmo);
+            GameUI.Instance.UpdateAmmoText(_weapon.currentAmmo, _weapon.maxAmmo);
         }
 
         private void Awake()
