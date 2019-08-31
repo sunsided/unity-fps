@@ -99,8 +99,17 @@ namespace Project.Scripts
             Cursor.lockState = CursorLockMode.Locked;
         }
 
+        private void Start()
+        {
+            GameUI.Instance.UpdateHealthBar(currentHp, maximumHp);
+            GameUI.Instance.UpdateAmmoText(_weapon);
+            GameUI.Instance.UpdateScoreText(0);
+        }
+
         private void Update()
         {
+            if (GameManager.Instance.gamePaused) return;
+
             Move();
             TryJump();
             TryShoot();
