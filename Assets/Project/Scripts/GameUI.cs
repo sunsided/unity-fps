@@ -54,7 +54,7 @@ namespace Project.Scripts
         }
 
         [UsedImplicitly]
-        public void OnResumeButton() => GameManager.Instance.TryTogglePauseGame();
+        public void OnResumeButton() => GameManager.Instance.TogglePauseGame();
 
         [UsedImplicitly]
         public void OnRestartButton() => SceneManager.LoadScene(SceneManager.GetActiveScene().name);

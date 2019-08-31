@@ -31,8 +31,14 @@ public class GameManager : MonoBehaviour
     public void TryTogglePauseGame()
     {
         if (!Input.GetButtonDown("Cancel")) return;
+        TogglePauseGame();
+    }
+
+    public void TogglePauseGame()
+    {
         gamePaused = !gamePaused;
         Time.timeScale = gamePaused ? 0 : 1;
+        Cursor.lockState = gamePaused ? CursorLockMode.None : CursorLockMode.Locked;
 
         GameUI.Instance.TogglePauseMenu(gamePaused);
     }
