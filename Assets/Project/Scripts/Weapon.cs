@@ -2,7 +2,7 @@
 
 namespace Project.Scripts
 {
-    public class Weapon : MonoBehaviour
+    public class Weapon : MonoBehaviour, IWeaponAmmo
     {
         [Header("Models")]
         public ObjectPool bulletPool;
@@ -20,6 +20,9 @@ namespace Project.Scripts
 
         private float _lastShootTime;
 
+        public int CurrentAmmo => currentAmmo;
+        public int MaxAmmo => maxAmmo;
+
         public bool CanShoot()
         {
             if (Time.time - _lastShootTime < shootRate) return false;
@@ -33,7 +36,7 @@ namespace Project.Scripts
 
             if (isPlayer)
             {
-                GameUI.Instance.UpdateAmmoText(currentAmmo, maxAmmo);
+                GameUI.Instance.UpdateAmmoText(this);
             }
 
             var bullet = bulletPool.GetObject();

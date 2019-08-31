@@ -38,6 +38,9 @@ namespace Project.Scripts
 
         public void UpdateScoreText(int score) => scoreText.text = $"Score: {score}";
 
+        public void UpdateAmmoText<T>(T weapon) where T : IWeaponAmmo =>
+            UpdateAmmoText(weapon.CurrentAmmo, weapon.MaxAmmo);
+
         public void UpdateAmmoText(int currentAmmo, int maxAmmo) => ammoText.text = $"Ammo: {currentAmmo}/{maxAmmo}";
 
         public void TogglePauseMenu(bool paused) => pauseMenu.SetActive(paused);
