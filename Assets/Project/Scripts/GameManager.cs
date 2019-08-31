@@ -1,5 +1,4 @@
-﻿using System;
-using Project.Scripts;
+﻿using Project.Scripts;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -44,7 +43,7 @@ public class GameManager : MonoBehaviour
     {
         gamePaused = !gamePaused;
         FreezeGameIf(gamePaused);
-        Cursor.lockState = gamePaused ? CursorLockMode.None : CursorLockMode.Locked;
+        UnFreezeGameIf(!gamePaused);
         GameUI.Instance.TogglePauseMenu(gamePaused);
     }
 
@@ -95,6 +94,13 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         gamePaused = true;
         Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void UnFreezeGameIf(bool unfreeze)
+    {
+        if (!unfreeze) return;
+        Time.timeScale = 1;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void FreezeGameIf(bool shouldFreeze)
