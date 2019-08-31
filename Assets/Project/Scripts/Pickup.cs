@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -13,6 +14,9 @@ namespace Project.Scripts
         public float rotateSpeed;
         public float bobSpeed;
         public float bobHeight;
+
+        [Header("Audio")]
+        public AudioClip pickupSfx;
 
         private Vector3 _startPosition;
         private bool _bobbingUp;
@@ -42,34 +46,36 @@ namespace Project.Scripts
             }
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter([NotNull] Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (!other.CompareTag("Player")) return;
+
+            var player = other.GetComponent<Player>();
+            switch (type)
             {
-                var player = other.GetComponent<Player>();
-                switch (type)
+                case PickupType.Health:
                 {
-                    case PickupType.Health:
-                    {
-                        player.GiveHealth(value);
-                        break;
-                    }
-
-                    case PickupType.Ammo:
-                    {
-                        player.GiveAmmo(value);
-                        break;
-                    }
-
-                    default:
-                    {
-                        Debug.Log($"Unhandled pickup type: {type}");
-                        break;
-                    }
+                    player.GiveHealth(value);
+                    break;
                 }
 
-                Destroy(gameObject);
+                case PickupType.Ammo:
+                {
+                    player.GiveAmmo(value);
+                    break;
+                }
+
+                default:
+                {
+                    Debug.Log($"Unhandled pickup type: {type}");
+                    break;
+                }
             }
+
+            // Use the player's audio source instead of a custom one.
+            other.GetComponent<AudioSource>().PlayOneShot(pickupSfx);
+
+            Destroy(gameObject);
         }
     }
 }
