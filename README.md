@@ -11,4 +11,4 @@ Contents and Lessons Learned:
 - Bobbing pickups,
 - Ad-hoc sound playing using `PlayOneShot`
 - FPS player motion and looking,
-- Mouse movement confimenent.
+- Mouse movement confinement.
